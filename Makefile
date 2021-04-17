@@ -3,12 +3,7 @@ RISCV_GCC = $(CROSS_COMPILE)gcc -fPIC -march=rv64ima -mabi=lp64 -mcmodel=medany 
 RISCV_AR = $(CROSS_COMPILE)ar
 RISCV_RANLIB = $(CROSS_COMPILE)ranlib
 
-.PHONY: all perch crt0.o
-
-all: perch crt0.o
-
-crt0.o: start.S
-	$(RISCV_GCC) -D_DRAMFS -o $@ -c $<
+.PHONY: perch
 
 perch:
 	$(RISCV_GCC) -c *.c *.S
