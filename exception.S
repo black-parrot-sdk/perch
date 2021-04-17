@@ -2,12 +2,12 @@
 .option nopic
 .text
 .align 1
-.globl bp_mtvec_handler
+.globl __mtvec_handler
 
 .globl decode_illegal
 .type  decode_illegal, @function
 
-bp_mtvec_handler:
+__mtvec_handler:
     # Swap in the machine mode stack pointer
     # Note: We only need to save the stack if we have a special emu stack. Security?
     csrrw sp, mscratch, sp 
