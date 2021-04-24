@@ -18,9 +18,14 @@ uint64_t bp_get_hart();
 
 void bp_barrier_end(volatile uint64_t *barrier_address, uint64_t total_num_cores);
 
-void bp_hprint(uint8_t hex);
+// Prints the given nibble as a hex character. 0 <= nibble <= 0xf.
+void bp_hprint(uint8_t nibble);
 
+// Prints the provided ASCII character.
 void bp_cprint(uint8_t ch);
+
+// Prints the given value as a 16-nibble hex number, preceded by "0x".
+void bp_hprint_uint64(uint64_t val);
 
 void bp_finish(uint8_t code);
 

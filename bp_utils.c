@@ -45,15 +45,24 @@ void bp_finish(uint8_t code) {
   *(FINISH_BASE_ADDR+core_id*8) = code;
 }
 
-void bp_hprint(uint8_t hex) {
-
-  *(PUTCHAR_BASE_ADDR) = ('0' + hex);
+void bp_hprint(uint8_t nibble) {
+  if (nibble <= 0x9) {
+    bp_cprint('0' + nibble);
+  } else if (nibble <= 0xf) {
+    bp_cprint('a' + nibble - 0xa);
+  }
 }
 
 void bp_cprint(uint8_t ch) {
-
   *(PUTCHAR_BASE_ADDR) = ch;
 }
 
-
-
+void bp_hprint_uint64(uint64_t val) {
+  bp_cprint('0');
+  bp_cprint('x');
+  for (int i = 0; i < 16; i++) {
+    uint8_t nibble = val >> 60;
+    bp_hprint(nibble);
+    val <<= 4;
+  }
+}
