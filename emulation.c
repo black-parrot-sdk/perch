@@ -46,7 +46,20 @@ static uint64_t (*mul_jt[8])(uint64_t, uint64_t) =
   0, mul_mulh, mul_mulhsu, mul_mulhu, 0, 0, 0, 0
 };
 
-void decode_illegal(uint64_t *regs, uint64_t mcause, uint64_t instr) 
+void bp_dump_trap_context(uint64_t mcause, uint64_t mtval)
+{
+  uint64_t mepc;
+  __asm__ __volatile__ ("csrr %0, mepc" : "=r" (mepc));
+
+  bp_print_string("mcause: ");
+  bp_hprint_uint64(mcause);
+  bp_print_string("\nmtval:  ");
+  bp_hprint_uint64(mtval);
+  bp_print_string("\nmepc:   ");
+  bp_hprint_uint64(mepc);
+}
+
+void bp_emulate_illegal_instruction(uint64_t *regs, uint64_t mcause, uint64_t instr)
 {
   uint16_t funct11 = FUNCT11(instr);
   uint8_t funct5 = FUNCT5(instr);
@@ -55,7 +68,7 @@ void decode_illegal(uint64_t *regs, uint64_t mcause, uint64_t instr)
   uint8_t funct3 = FUNCT3(instr);
   uint8_t rd_addr = RD(instr);
   uint8_t opcode = OPCODE(instr);
-  
+
   uint64_t rs1_data = regs[rs1_addr];
   uint64_t rs2_data = regs[rs2_addr];
 
@@ -66,8 +79,12 @@ void decode_illegal(uint64_t *regs, uint64_t mcause, uint64_t instr)
     regs[rd_addr] = mul_jt[funct3](rs1_data, rs2_data);
   } else {
     // Fail on truly illegal instruction
-    while(1);
-    //bp_finish(-1);
+    bp_dump_trap_context(mcause, instr);
+    bp_panic("\nIllegal instruction\n");
   }
 }
 
+void bp_unhandled_trap_abort(uint64_t *regs, uint64_t mcause, uint64_t mtval) {
+  bp_dump_trap_context(mcause, mtval);
+  bp_panic("\nUnhandled machine-mode trap\n");
+}

@@ -4,8 +4,7 @@
 .align 1
 .globl __mtvec_handler
 
-.globl decode_illegal
-.type  decode_illegal, @function
+#define MCAUSE_ILLEGAL_INSTRUCTION 0x2
 
 __mtvec_handler:
     # Swap in the machine mode stack pointer
@@ -50,17 +49,26 @@ __mtvec_handler:
     sd x1, -240(sp)
     sd x0, -248(sp)
 
-    # Adjust the stack    
+    # Adjust the stack
     addi sp, sp, -256 
 
-    ## Decode the faulting instruction
+    ## Handle the exception if able, e.g. emulate software-assisted instructions
     # Save a pointer to the registers
     addi a0, sp, 8
-    # Read the faulting instruction
+    # Read the exception code
     csrr a1, mcause
     # Read the trap value
-    csrr a2, mbadaddr
-    jal decode_illegal
+    csrr a2, mtval
+
+    # return from handler directly to .Lfinish
+    la ra, .Lfinish
+
+    # Invoke the appropriate handler
+    li t0, MCAUSE_ILLEGAL_INSTRUCTION
+    beq a1, t0, bp_emulate_illegal_instruction
+    j bp_unhandled_trap_abort
+
+.Lfinish:
 
     # Return address is the instruction after MEPC
     csrr t0, mepc
