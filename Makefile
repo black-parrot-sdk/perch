@@ -9,6 +9,10 @@ perch:
 	$(RISCV_GCC) -c *.c *.S
 	$(RISCV_AR) -rc libperch.a *.o
 	$(RISCV_RANLIB) libperch.a
+	
+	$(RISCV_GCC) -c -DBAREMETAL *.c *.S
+	$(RISCV_AR) -rc libperchbm.a *.o
+	$(RISCV_RANLIB) libperchbm.a
 
 clean:
 	-rm -rf *.a
