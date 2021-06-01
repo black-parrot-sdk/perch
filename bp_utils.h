@@ -7,6 +7,8 @@ extern "C" {
 
 #include <stdint.h>
 #include "bsg_newlib_intf.h"
+#include "aviary.h"
+#include "encoding.h"
 
 #define HOST_DEV_BASE_ADDR ((char *)(0x00100000))
 #define GETCHAR_BASE_ADDR  ((char *)(HOST_DEV_BASE_ADDR+0x0000))
@@ -28,6 +30,8 @@ void bp_cprint(uint8_t ch);
 void bp_hprint_uint64(uint64_t val);
 
 void bp_finish(uint8_t code);
+
+uint32_t bp_param_get(uint64_t addr);
 
 #define BP_CFG_BASE_ADDR ((char *)(0x00200000))
 

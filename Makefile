@@ -1,5 +1,5 @@
 
-RISCV_GCC = $(CROSS_COMPILE)gcc -fPIC -march=rv64ima -mabi=lp64 -mcmodel=medany -static
+RISCV_GCC = $(CROSS_COMPILE)gcc -fPIC -march=rv64ima -mabi=lp64 -mcmodel=medany -static -I$(BP_SDK_INCLUDE_DIR)
 RISCV_AR = $(CROSS_COMPILE)ar
 RISCV_RANLIB = $(CROSS_COMPILE)ranlib
 
