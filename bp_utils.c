@@ -74,7 +74,23 @@ void bp_hprint_uint64(uint64_t val) {
   }
 }
 
+void bp_print_string(char *str) {
+  while (*str) {
+    bp_cprint(*str);
+    str++;
+  }
+}
+
+void bp_panic(char *message) {
+  if (message) {
+    bp_print_string(message);
+  }
+
+  bp_finish(1);
+  while (1);
+}
+
+
 uint32_t bp_param_get(uint64_t addr) {
   return *(volatile uint32_t *) addr;
 }
-

@@ -1,5 +1,5 @@
 
-extern void decode_illegal(uint64_t*, uint64_t, uint64_t);
+extern void bp_emulate_illegal_instruction(uint64_t*, uint64_t, uint64_t);
 
 extern uint64_t amo_swapd(uint64_t, uint64_t);
 extern uint64_t amo_swapw(uint64_t, uint64_t);
@@ -31,3 +31,5 @@ extern uint64_t amo_maxud(uint64_t, uint64_t);
 extern uint64_t mul_mulh(uint64_t, uint64_t);
 extern uint64_t mul_mulhsu(uint64_t, uint64_t);
 extern uint64_t mul_mulhu(uint64_t, uint64_t);
+
+void bp_unhandled_trap_abort(uint64_t *regs, uint64_t mcause, uint64_t mtval);

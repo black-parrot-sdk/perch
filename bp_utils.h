@@ -31,6 +31,10 @@ void bp_hprint_uint64(uint64_t val);
 
 void bp_finish(uint8_t code);
 
+void bp_print_string(char *str);
+
+void bp_panic(char *message);
+
 uint32_t bp_param_get(uint64_t addr);
 
 #define BP_CFG_BASE_ADDR ((char *)(0x00200000))
