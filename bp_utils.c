@@ -73,3 +73,8 @@ void bp_hprint_uint64(uint64_t val) {
     val <<= 4;
   }
 }
+
+uint32_t bp_param_get(uint64_t addr) {
+  return *(volatile uint32_t *) addr;
+}
+
