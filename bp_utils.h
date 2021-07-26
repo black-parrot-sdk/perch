@@ -1,16 +1,16 @@
 #ifndef BP_UTILS_H
 #define BP_UTILS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdint.h>
 #include "bsg_newlib_intf.h"
 #include "aviary.h"
 #include "config.h"
 #include "host.h"
 #include "encoding.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 uint64_t bp_get_hart();
 

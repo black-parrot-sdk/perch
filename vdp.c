@@ -60,7 +60,7 @@ void bp_call_vector_dot_product_accelerator(uint8_t type, struct VDP_CSR vdp_csr
   uint64_t *cfg_base_addr;
   cfg_base_addr = type ? SACCEL_VDP_BASE_ADDR : CACCEL_VDP_BASE_ADDR;
 
-  uint64_t *sac_cfg = (uint64_t *) 0x0020000a;
+  uint64_t *sac_cfg = (uint64_t *) CONFIG_REG_HIO_MASK;
   bp_set_mmio_csr(sac_cfg, 0, 1);//enable sac mem region csr 
 
   if(type){
@@ -87,7 +87,7 @@ void bp_call_vector_add_accelerator(uint8_t type, struct VDP_CSR vdp_csrs){
   uint64_t *cfg_base_addr;
   cfg_base_addr = type ? SACCEL_VADD_BASE_ADDR : CACCEL_VADD_BASE_ADDR;
   
-  uint64_t *sac_cfg = (uint64_t *) 0x0020000a;
+  uint64_t *sac_cfg = (uint64_t *) CONFIG_REG_HIO_MASK;
   bp_set_mmio_csr(sac_cfg, 0, 1);//enable sac mem region csr
 
   if(type){
@@ -127,18 +127,17 @@ void bp_hw_dma(uint64_t *cfg_base_dma_addr, uint64_t *src, uint64_t length, uint
 
 uint64_t bp_call_zipline_accelerator(uint8_t type, struct Zipline_CSR zipline_csrs, uint64_t input_tlv_num)
 {
-  uint64_t *sac_cfg = (uint64_t *) 0x0020000a;
+  uint64_t *sac_cfg = (uint64_t *) CONFIG_REG_HIO_MASK;
   bp_set_mmio_csr(sac_cfg, 0, 1);//enable sac mem region csr
  
   uint64_t *cfg_base_addr;
   uint64_t *cfg_base_dma_addr;
 
-  cfg_base_addr = (uint64_t *)(0x02100000);//device 1 in the tile/compression engine
-  cfg_base_dma_addr = (uint64_t *)(0x02200000);//device 2 in the tile/dma engine
+  cfg_base_addr = (uint64_t *)(0x03100000);//device 1 in the tile/compression engine
+  cfg_base_dma_addr = (uint64_t *)(0x03200000);//device 2 in the tile/dma engine
 
-  //send input
   int i=0;
-  for (i=0; i < input_tlv_num; i++)
+  for (int i=0; i < input_tlv_num; i++)
   {
     bp_set_mmio_csr(cfg_base_addr, TLV_TYPE, zipline_csrs.input_ptr[i].type);
     bp_hw_dma(cfg_base_dma_addr, zipline_csrs.input_ptr[i].data_ptr, zipline_csrs.input_ptr[i].length, 0);
