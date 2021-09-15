@@ -9,7 +9,7 @@
 #define CACCEL_Y_DIM 1
 #define CACCEL_VDP_BASE_ADDR (uint64_t *) ((uint64_t) BP_CONFIG<<BP_CFG_WIDTH) 
 #define SACCEL_VDP_BASE_ADDR (uint64_t *) ((uint64_t) (BP_CONFIG+CACCEL_Y_DIM)<<BP_CFG_WIDTH)
-#define BP_DADDR_WIDTH 36 
+#define BP_DADDR_WIDTH 33
 #define SACCEL_VDP_MEM_BASE   (uint64_t *)((uint64_t) 1<<(BP_DADDR_WIDTH+1))
 /////////////////////////////////VDP/////////////////////////////////////////
 #define ACCEL_VPD_INPUT_A_PTR    0
