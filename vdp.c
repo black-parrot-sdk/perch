@@ -100,17 +100,16 @@ void bp_hw_dma(uint64_t *cfg_base_dma_addr, uint64_t *src, uint64_t length, uint
 }
 
 
-uint64_t bp_call_loopback_accelerator(uint64_t *input_ptr, uint64_t *resp_ptr, uint64_t len, uint64_t bp_daddr_width)
+uint64_t bp_call_loopback_accelerator(uint64_t *input_ptr, uint64_t *resp_ptr, uint64_t len)
 {
   uint64_t *sac_cfg = (uint64_t *) CONFIG_REG_HIO_MASK;
   bp_set_mmio_csr(sac_cfg, 0, 1);//enable sac mem region csr 
  
-  uint64_t *loopback_mem_base = (uint64_t *) ((uint64_t) 1<< (bp_daddr_width));
   //write to the accelerator memory region
-  dma_cpy(input_ptr, loopback_mem_base, len);
+  dma_cpy(input_ptr, SACCEL_MEM_BASE, len);
 
   //read back from the accelerator memory
-  dma_cpy(loopback_mem_base, resp_ptr, len);
+  dma_cpy(SACCEL_MEM_BASE, resp_ptr, len);
 
   uint64_t write_cnt = 0;
   write_cnt = bp_get_mmio_csr(SACCEL_VDP_BASE_ADDR, ACCEL_LOOPBACK_WR_CNT);

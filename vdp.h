@@ -1,16 +1,16 @@
 #ifndef VDP_H
 #define VDP_H
 #include <stdint.h>
-
+#include "aviary.h"
 
 ////////////////////////////////BP-CONFIG///////////////////////////////////
-#define BP_CONFIG 1
+#define BP_CONFIG (bp_param_get(PARAM_CC_X_DIM)*bp_param_get(PARAM_CC_Y_DIM))
 #define BP_CFG_WIDTH 24
-#define CACCEL_Y_DIM 1
+#define CACCEL_Y_DIM bp_param_get(PARAM_CC_Y_DIM)
 #define CACCEL_VDP_BASE_ADDR (uint64_t *) ((uint64_t) BP_CONFIG<<BP_CFG_WIDTH) 
 #define SACCEL_VDP_BASE_ADDR (uint64_t *) ((uint64_t) (BP_CONFIG+CACCEL_Y_DIM)<<BP_CFG_WIDTH)
-#define BP_DADDR_WIDTH 33
-#define SACCEL_VDP_MEM_BASE   (uint64_t *)((uint64_t) 1<<(BP_DADDR_WIDTH))
+#define BP_DADDR_WIDTH bp_param_get(PARAM_DADDR_WIDTH)
+#define SACCEL_MEM_BASE   (uint64_t *)((uint64_t) 1<<(BP_DADDR_WIDTH))
 /////////////////////////////////VDP/////////////////////////////////////////
 #define ACCEL_VPD_INPUT_A_PTR    0
 #define ACCEL_VPD_INPUT_B_PTR    1
@@ -44,7 +44,7 @@ void bp_call_vector_dot_product_accelerator(uint8_t type, struct VDP_CSR vdp_csr
 
 /////////////////////////////////LOOPBACK////////////////////////////////////
 #define ACCEL_LOOPBACK_WR_CNT    0
-uint64_t bp_call_loopback_accelerator(uint64_t *input_ptr, uint64_t *resp_ptr, uint64_t len, uint64_t bp_daddr_width);
+uint64_t bp_call_loopback_accelerator(uint64_t *input_ptr, uint64_t *resp_ptr, uint64_t len);
 
 /////////////////////////////////ZIPLINE/////////////////////////////////////
 //Zipline CSR IDX
