@@ -64,14 +64,14 @@ void bp_call_vector_dot_product_accelerator(uint8_t type, struct VDP_CSR vdp_csr
   bp_set_mmio_csr(sac_cfg, 0, 1);//enable sac mem region csr 
 
   if(type){
-    dma_cpy(vdp_csrs.input_a_ptr, SACCEL_VDP_MEM_BASE, vdp_csrs.input_length);
-    dma_cpy(vdp_csrs.input_b_ptr, SACCEL_VDP_MEM_BASE+vdp_csrs.input_length, vdp_csrs.input_length);
+    dma_cpy(vdp_csrs.input_a_ptr, SACCEL_MEM_BASE, vdp_csrs.input_length);
+    dma_cpy(vdp_csrs.input_b_ptr, SACCEL_MEM_BASE+vdp_csrs.input_length, vdp_csrs.input_length);
    }
   
   uint64_t *src_vec_a, *src_vec_b, *result_vec;
-  src_vec_a =  type ? SACCEL_VDP_MEM_BASE : vdp_csrs.input_a_ptr;
-  src_vec_b =  type ? SACCEL_VDP_MEM_BASE+vdp_csrs.input_length : vdp_csrs.input_b_ptr;
-  result_vec = type ? SACCEL_VDP_MEM_BASE+2*vdp_csrs.input_length : vdp_csrs.resp_ptr;
+  src_vec_a =  type ? SACCEL_MEM_BASE : vdp_csrs.input_a_ptr;
+  src_vec_b =  type ? SACCEL_MEM_BASE+vdp_csrs.input_length : vdp_csrs.input_b_ptr;
+  result_vec = type ? SACCEL_MEM_BASE+2*vdp_csrs.input_length : vdp_csrs.resp_ptr;
 
   bp_vdp_config_accelerator(cfg_base_addr, src_vec_a, src_vec_b, vdp_csrs.input_length, 0, result_vec, 1);
   bp_vdp_accelerator_start_cmd(cfg_base_addr);
