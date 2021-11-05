@@ -15,3 +15,8 @@ void dramfs_exit(int exit_status) {
 void dramfs_sendchar(char ch) {
   bp_cprint(ch);
 }
+
+int dramfs_getchar(void) {
+  return bp_cget();
+}
+
