@@ -60,6 +60,16 @@ void bp_print_string(char *str) {
   }
 }
 
+int bp_cget(void) {
+  char c = *(GETCHAR_BASE_ADDR);
+  // We don't have a empty fifo signal so just alias 255 to -1 for now, to simulate EOF
+  if (c == 255) return -1;
+  // Substitute CR with newline to make scanf work
+  if (c == '\r') return '\n';
+  
+  return c;
+}
+
 void bp_panic(char *message) {
   if (message) {
     bp_print_string(message);

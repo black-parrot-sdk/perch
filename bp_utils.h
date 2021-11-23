@@ -29,6 +29,8 @@ void bp_finish(uint8_t code);
 
 void bp_print_string(char *str);
 
+int bp_cget(void);
+
 void bp_panic(char *message);
 
 uint32_t bp_param_get(uint64_t addr);
