@@ -29,6 +29,8 @@ void bp_finish(uint8_t code) {
   uint64_t core_id = bp_get_hart();
 
   *(FINISH_BASE_ADDR+core_id*8) = code;
+  __asm__ volatile("fence");
+  while (1);
 }
 
 void bp_hprint(uint8_t nibble) {
