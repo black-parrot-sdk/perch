@@ -33,7 +33,7 @@ int bp_cget(void);
 
 void bp_panic(char *message);
 
-uint32_t bp_param_get(uint64_t addr);
+uint32_t bp_param_get(char *addr);
 
 #ifdef __cplusplus
 }

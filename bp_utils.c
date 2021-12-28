@@ -81,7 +81,7 @@ void bp_panic(char *message) {
   while (1);
 }
 
-uint32_t bp_param_get(uint64_t addr) {
+uint32_t bp_param_get(char *addr) {
   return *(volatile uint32_t *) addr;
 }
 
