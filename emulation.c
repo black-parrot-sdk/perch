@@ -82,6 +82,11 @@ void bp_emulate_illegal_instruction(uint64_t *regs, uint64_t mcause, uint64_t in
     bp_dump_trap_context(mcause, instr);
     bp_panic("\nIllegal instruction\n");
   }
+  // Success. Now move mepc to next instruction
+  unsigned long mepc;
+  __asm__ __volatile__ ("csrr %0, mepc" : "=r"(mepc));
+  mepc += 4;
+  __asm__ __volatile__ ("csrw mepc, %0" : : "r"(mepc));
 }
 
 void bp_unhandled_trap_abort(uint64_t *regs, uint64_t mcause, uint64_t mtval) {
