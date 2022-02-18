@@ -42,18 +42,20 @@ static void (*interrupt_handler[INTERRUPT_TOTAL])(uint64_t *, uint64_t, uint64_t
 };
 
 int register_trap_handler(void (*handler)(uint64_t *, uint64_t, uint64_t),
-        int index, int is_exception)
+        unsigned long mcause)
 {
+  unsigned index = mcause & ~(1UL << 63);
+  int is_exception = !(mcause & (1UL << 63));
   if(is_exception) {
     // exception handler registration
-    if(index >= 0 && index < EXCEPTION_TOTAL) {
+    if(index < EXCEPTION_TOTAL) {
       exception_handler[index] = handler;
       return 0; // success
     }
     return -1; // fail
   } else {
     // interrupt handler registration
-    if(index >= 0 && index < INTERRUPT_TOTAL) {
+    if(index < INTERRUPT_TOTAL) {
       interrupt_handler[index] = handler;
       return 0; // success
     }
