@@ -9,7 +9,7 @@
 //   optimize for size.
 //
 
-#define PARAM_ROM_BASE_ADDR 0x20000
+#define PARAM_ROM_BASE_ADDR 0x120000
 
 #define PARAM_CC_X_DIM                            ((char *)(PARAM_ROM_BASE_ADDR | 0x0000))
 #define PARAM_CC_Y_DIM                            ((char *)(PARAM_ROM_BASE_ADDR | 0x0004))
