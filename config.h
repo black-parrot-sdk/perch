@@ -6,8 +6,8 @@
 
 #define CONFIG_BASE_ADDR 0x200000
 
-#define CONFIG_REG_UNUSED                  ((char *)(CONFIG_BASE_ADDR | 0x00004))
-#define CONFIG_REG_FREEZE                  ((char *)(CONFIG_BASE_ADDR | 0x00008))
+#define CONFIG_REG_FREEZE                  ((char *)(CONFIG_BASE_ADDR | 0x00004))
+#define CONFIG_REG_NPC                     ((char *)(CONFIG_BASE_ADDR | 0x00008))
 #define CONFIG_REG_CORE_ID                 ((char *)(CONFIG_BASE_ADDR | 0x0000c))
 #define CONFIG_REG_DID                     ((char *)(CONFIG_BASE_ADDR | 0x00010))
 #define CONFIG_REG_CORD                    ((char *)(CONFIG_BASE_ADDR | 0x00014))
