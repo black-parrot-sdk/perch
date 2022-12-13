@@ -3,9 +3,9 @@
 
 #include <stdint.h>
 #include "bsg_newlib_intf.h"
-#include "aviary.h"
-#include "config.h"
-#include "host.h"
+#include "bp_aviary.h"
+#include "bp_config.h"
+#include "bp_host.h"
 #include "encoding.h"
 
 #ifdef __cplusplus

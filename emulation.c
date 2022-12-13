@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-#include "emulation.h"
+#include "bp_emulation.h"
 #include "bp_utils.h"
 
 #define CSR_ADDR_MVENDORID  0xF11
