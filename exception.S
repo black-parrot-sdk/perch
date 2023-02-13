@@ -4,8 +4,6 @@
 .align 1
 .globl __mtvec_handler
 
-#define MCAUSE_ILLEGAL_INSTRUCTION 0x2
-
 __mtvec_handler:
     # Swap in the machine mode stack pointer
     # Note: We only need to save the stack if we have a special emu stack. Security?
@@ -60,20 +58,7 @@ __mtvec_handler:
     # Read the trap value
     csrr a2, mtval
 
-    # return from handler directly to .Lfinish
-    la ra, .Lfinish
-
-    # Invoke the appropriate handler
-    li t0, MCAUSE_ILLEGAL_INSTRUCTION
-    beq a1, t0, bp_emulate_illegal_instruction
-    j bp_unhandled_trap_abort
-
-.Lfinish:
-
-    # Return address is the instruction after MEPC
-    csrr t0, mepc
-    addi t0, t0, 4
-    csrw mepc, t0
+    call bp_trap_handler
 
     # Pop temp registers from stack
     addi sp, sp, 256
