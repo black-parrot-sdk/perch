@@ -1,6 +1,9 @@
 #include <stdint.h>
 #include "bp_trap.h"
 #include "bp_emulation.h"
+#ifdef PK
+#include "syscall.h"
+#endif
 
 #define EXCEPTION_TOTAL            16
 #define INTERRUPT_TOTAL            12
@@ -18,7 +21,11 @@ static void (*exception_handler[EXCEPTION_TOTAL])(uint64_t *, uint64_t, uint64_t
   bp_unhandled_trap_abort,        // 8
   bp_unhandled_trap_abort,        // 9
   bp_unhandled_trap_abort,        // 10
+#ifdef PK
+  bp_handle_syscall,              // 11
+#else
   bp_unhandled_trap_abort,        // 11
+#endif
   bp_unhandled_trap_abort,        // 12
   bp_unhandled_trap_abort,        // 13
   bp_unhandled_trap_abort,        // 14

@@ -3,6 +3,7 @@
 .text
 
 .global amo_swapw, amo_swapd
+.global amo_casw, amo_casd
 .global amo_addw, amo_addd
 .global amo_xorw, amo_xord
 .global amo_andw, amo_andd
@@ -36,6 +37,44 @@ amo_swapd:
   sc.d t1, a1, (a0)
   bnez t1, amo_swapd
   mv a0, t0
+  jalr x0, ra
+
+# AMO_CAS.W
+# Parameters
+#   a0: 32-bit aligned address
+#   a1: data to compare with [a0]
+#   a2: data to store in [a0] on success
+# Return
+#   ra: comparison result
+amo_casw:
+  lr.w t0, (a0)
+  mv t2, t0
+  xor t1, t0, a1
+  bnez t1, 1f
+  mv t0, a2
+1:
+  sc.w t0, t0, (a0)
+  bnez t0, amo_casw
+  mv a0, t2
+  jalr x0, ra
+
+# AMO_CAS.D
+# Parameters
+#   a0: 64-bit aligned address
+#   a1: data to compare with [a0]
+#   a2: data to store in [a0] on success
+# Return
+#   ra: comparison result
+amo_casd:
+  lr.d t0, (a0)
+  mv t2, t0
+  xor t1, t0, a1
+  bnez t1, 1f
+  mv t0, a2
+1:
+  sc.d t0, t0, (a0)
+  bnez t0, amo_casd
+  mv a0, t2
   jalr x0, ra
 
 # AMO_ADD.W

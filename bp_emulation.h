@@ -4,6 +4,9 @@ extern void bp_emulate_illegal_instruction(uint64_t*, uint64_t, uint64_t);
 extern uint64_t amo_swapd(uint64_t, uint64_t);
 extern uint64_t amo_swapw(uint64_t, uint64_t);
 
+extern uint64_t amo_casd(uint64_t, uint64_t, uint64_t);
+extern uint64_t amo_casw(uint64_t, uint64_t, uint64_t);
+
 extern uint64_t amo_addd(uint64_t, uint64_t);
 extern uint64_t amo_addw(uint64_t, uint64_t);
 

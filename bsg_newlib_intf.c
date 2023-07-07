@@ -1,5 +1,6 @@
 #include "bp_utils.h"
 
+#ifndef PK
 void dramfs_init(void) {
 
     // Init file system
@@ -19,4 +20,4 @@ void dramfs_sendchar(char ch) {
 int dramfs_getchar(void) {
   return bp_cget();
 }
-
+#endif
