@@ -134,12 +134,16 @@ int fd_close(int fd)
 
 ssize_t file_read(file_t* f, void* buf, size_t size)
 {
-  return frontend_syscall(SYS_read, f->kfd, (uint64_t)buf, size, 0, 0, 0, 0);
+  ssize_t res = frontend_syscall(SYS_read, f->kfd, (uint64_t)buf, size, 0, 0, 0, 0);
+  nbfetch(buf, size);
+  return res;
 }
 
 ssize_t file_pread(file_t* f, void* buf, size_t size, off_t offset)
 {
-  return frontend_syscall(SYS_pread, f->kfd, (uint64_t)buf, size, offset, 0, 0, 0);
+  ssize_t res = frontend_syscall(SYS_pread, f->kfd, (uint64_t)buf, size, offset, 0, 0, 0);
+  nbfetch(buf, size);
+  return res;
 }
 
 ssize_t file_write(file_t* f, const void* buf, size_t size)

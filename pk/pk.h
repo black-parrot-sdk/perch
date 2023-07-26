@@ -11,7 +11,7 @@
 #include <stdarg.h>
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
-#define mb() asm volatile ("fence" ::: "memory")
+#define mb() asm volatile ("fence.i" ::: "memory")
 
 #define panic(s,...) do { do_panic(s"\n", ##__VA_ARGS__); } while(0)
 #define kassert(cond) do { if(!(cond)) kassert_fail(""#cond); } while(0)

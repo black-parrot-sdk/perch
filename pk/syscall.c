@@ -18,13 +18,11 @@ typedef long (*syscall_t)(long, long, long, long, long, long, long);
 
 #define MAX_BUF 512
 
-//TODO: just BP exit
 void sys_exit(int code)
 {
   shutdown(code);
 }
 
-//TODO: replance BP getchar/putchar for console read/write
 ssize_t sys_read(int fd, char* buf, size_t n)
 {
   ssize_t r = -EBADF;
@@ -189,6 +187,7 @@ int sys_fstat(int fd, void* st)
   {
     struct frontend_stat buf;
     r = frontend_syscall(SYS_fstat, f->kfd, (uint64_t)&buf, 0, 0, 0, 0, 0);
+    nbfetch(&buf, sizeof(buf));
     memcpy(st, &buf, sizeof(buf));
     file_decref(f);
   }
@@ -278,6 +277,7 @@ long sys_lstat(const char* name, void* st)
   size_t name_size = strlen(kname)+1;
 
   long ret = frontend_syscall(SYS_lstat, (uint64_t)kname, name_size, (uint64_t)&buf, 0, 0, 0, 0);
+  nbfetch(&buf, sizeof(buf));
   memcpy(st, &buf, sizeof(buf));
   return ret;
 }
@@ -295,6 +295,7 @@ long sys_fstatat(int dirfd, const char* name, void* st, int flags)
     size_t name_size = strlen(kname)+1;
 
     long ret = frontend_syscall(SYS_fstatat, kfd, (uint64_t)kname, name_size, (uint64_t)&buf, flags, 0, 0);
+    nbfetch(&buf, sizeof(buf));
     memcpy(st, &buf, sizeof(buf));
     return ret;
   }
@@ -319,6 +320,7 @@ long sys_statx(int dirfd, const char* name, int flags, unsigned int mask, void *
     size_t name_size = strlen(kname)+1;
 
     long ret = frontend_syscall(SYS_statx, kfd, (uint64_t)kname, name_size, flags, mask, (uint64_t)&buf, 0);
+    nbfetch(&buf, sizeof(buf));
     memcpy(st, &buf, sizeof(buf));
     return ret;
   }
@@ -414,6 +416,7 @@ long sys_getcwd(char* buf, size_t size)
 {
   char kbuf[MAX_BUF];
   long ret = frontend_syscall(SYS_getcwd, (uint64_t)kbuf, MIN(size, MAX_BUF), 0, 0, 0, 0, 0);
+  nbfetch(kbuf, MIN(size, MAX_BUF));
   if (ret > 0)
     memcpy(buf, kbuf, strlen(kbuf) + 1);
   return ret;
@@ -429,7 +432,7 @@ long sys_brk(size_t pos)
   if(pos == 0)
     return (long)heap_ptr;
 
-  heap_ptr = pos;
+  heap_ptr = (char*)pos;
 
   unsigned long sp;
   __asm__ __volatile__ ("csrr %0, mscratch" : "=r"(sp));
