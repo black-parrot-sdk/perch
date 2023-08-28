@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "bsg_newlib_intf.h"
+#include "bp_asm.h"
 #include "bp_aviary.h"
 #include "bp_config.h"
 #include "bp_host.h"
