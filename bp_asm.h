@@ -52,7 +52,7 @@
   __tmp; })
 
 #define tensor_csr_st(csr, val) ({ \
-  __asm__ __volatile__ (".insn i 0x0b, 0b100, x0, %0, " #csr "" : : "rK"(val)); \
+  __asm__ __volatile__ (".insn i 0x0b, 0b101, x0, %0, " #csr "" : : "rK"(val)); \
   })
 
 #endif
