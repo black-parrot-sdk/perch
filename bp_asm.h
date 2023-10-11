@@ -31,20 +31,20 @@
   __asm__ __volatile__ (".insn i 0x0f, 0b111, x0, x0, 0x2" : :); \
   })
 
-#define tensor_weight_load0(addr) ({ \
-  __asm__ __volatile__ (".insn i 0x0b, 0b000, %0, %0, 0" : : "r" (addr)); \
+#define tensor_wl(addr, buf, incr) ({                         \
+  __asm__ __volatile__ (                                      \
+          ".insn i 0x0b, 0b00" #buf ", %0, %0, " #incr "\n\t" \
+          : "+r" (addr)                                       \
+          :                                                   \
+    );                                                        \
   })
 
-#define tensor_weight_load1(addr) ({ \
-  __asm__ __volatile__ (".insn i 0x0b, 0b001, %0, %0, 0" : : "r" (addr)); \
-  })
-
-#define tensor_accum_load0(addr) ({ \
-  __asm__ __volatile__ (".insn i 0x0b, 0b010, %0, %0, 0" : : "r" (addr)); \
-  })
-
-#define tensor_accum_load1(addr) ({ \
-  __asm__ __volatile__ (".insn i 0x0b, 0b011, %0, %0, 0" : : "r" (addr)); \
+#define tensor_al(addr, buf, incr) ({                         \
+  __asm__ __volatile__ (                                      \
+          ".insn i 0x0b, 0b01" #buf ", %0, %0, " #incr "\n\t" \
+          : "+r" (addr)                                       \
+          :                                                   \
+    );                                                        \
   })
 
 #define tensor_csr_ld(csr) ({ unsigned long __tmp; \
