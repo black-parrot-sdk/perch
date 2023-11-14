@@ -53,6 +53,7 @@ void bp_hprint_uint64(uint64_t val) {
     bp_hprint(nibble);
     val <<= 4;
   }
+  bp_cprint('\n');
 }
 
 void bp_print_string(char *str) {
