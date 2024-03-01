@@ -106,6 +106,7 @@ file_t* file_openat(int dirfd, const char* fn, int flags, int mode)
     return ERR_PTR(-ENOMEM);
 
   size_t fn_size = strlen(fn)+1;
+  nbwrite(fn, fn_size);
   long ret = frontend_syscall(SYS_openat, dirfd, (uint64_t)fn, fn_size, flags, mode, 0, 0);
   if (ret >= 0)
   {
@@ -135,24 +136,26 @@ int fd_close(int fd)
 ssize_t file_read(file_t* f, void* buf, size_t size)
 {
   ssize_t res = frontend_syscall(SYS_read, f->kfd, (uint64_t)buf, size, 0, 0, 0, 0);
-  nbfetch(buf, size);
+  nbfetch(buf, res);
   return res;
 }
 
 ssize_t file_pread(file_t* f, void* buf, size_t size, off_t offset)
 {
   ssize_t res = frontend_syscall(SYS_pread, f->kfd, (uint64_t)buf, size, offset, 0, 0, 0);
-  nbfetch(buf, size);
+  nbfetch(buf, res);
   return res;
 }
 
 ssize_t file_write(file_t* f, const void* buf, size_t size)
 {
+  nbwrite(buf, size);
   return frontend_syscall(SYS_write, f->kfd, (uint64_t)buf, size, 0, 0, 0, 0);
 }
 
 ssize_t file_pwrite(file_t* f, const void* buf, size_t size, off_t offset)
 {
+  nbwrite(buf, size);
   return frontend_syscall(SYS_pwrite, f->kfd, (uint64_t)buf, size, offset, 0, 0, 0);
 }
 

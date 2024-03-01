@@ -2,7 +2,6 @@
 #define BP_UTILS_H
 
 #include <stdint.h>
-#include "bsg_newlib_intf.h"
 #include "bp_aviary.h"
 #include "bp_config.h"
 #include "bp_host.h"
@@ -34,6 +33,10 @@ int bp_cget(void);
 void bp_panic(char *message);
 
 uint32_t bp_param_get(char *addr);
+
+void bp_reset_counters();
+
+void bp_freeze_counters();
 
 #ifdef __cplusplus
 }

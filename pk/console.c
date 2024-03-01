@@ -14,6 +14,7 @@ static void vprintk(const char* s, va_list vl)
   char out[256]; // XXX
   int res = vsnprintf(out, sizeof(out), s, vl);
   int size = MIN(res, sizeof(out));
+  nbwrite(out, size);
   frontend_syscall(SYS_write, 2, (uint64_t)out, size, 0, 0, 0, 0);
 }
 

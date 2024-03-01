@@ -10,6 +10,7 @@
 void shutdown(int) __attribute__((noreturn));
 long frontend_syscall(long n, uint64_t a0, uint64_t a1, uint64_t a2, uint64_t a3, uint64_t a4, uint64_t a5, uint64_t a6);
 void nbfetch(void* p, size_t n);
+void nbwrite(const void* p, size_t n);
 
 struct frontend_stat {
   uint64_t dev;

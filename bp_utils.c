@@ -1,13 +1,6 @@
 #include <stdint.h>
 #include "bp_utils.h"
 
-// BAREMETAL ifdef overrides the weak dramfs_init function such that we don't
-//   need to go through filesystem initialization if we're not using this
-//   feature.
-#ifdef BAREMETAL
-    int dramfs_fs_init() { return 0; };
-#endif
-
 uint64_t bp_get_hart() {
     uint64_t core_id;
     __asm__ volatile("csrr %0, mhartid": "=r"(core_id): :);
@@ -85,3 +78,16 @@ uint32_t bp_param_get(char *addr) {
   return *(volatile uint32_t *) addr;
 }
 
+void bp_reset_counters() {
+  __asm__ __volatile__ ("csrw mcycle, %0" : : "r"(0));
+  __asm__ __volatile__ ("csrw minstret, %0" : : "r"(0));
+}
+
+void bp_freeze_counters() {
+  // sets cy and ir bits in mcountinhibit
+  // TODO: replace CSR code with name when supported by compiler
+  uint32_t val;
+  __asm__ __volatile__ ("csrr %0, 0x320" : "=r"(val));
+  val = val | 0x5;
+  __asm__ __volatile__ ("csrw 0x320, %0" : : "r"(val));
+}

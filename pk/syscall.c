@@ -20,6 +20,7 @@ typedef long (*syscall_t)(long, long, long, long, long, long, long);
 
 void sys_exit(int code)
 {
+  bp_freeze_counters();
   shutdown(code);
 }
 
@@ -171,7 +172,8 @@ int sys_renameat(int old_fd, const char *old_path, int new_fd, const char *new_p
 
     size_t old_size = strlen(kold_path)+1;
     size_t new_size = strlen(knew_path)+1;
-
+    nbwrite(kold_path, old_size);
+    nbwrite(knew_path, new_size);
     return frontend_syscall(SYS_renameat, old_kfd, (uint64_t)kold_path, old_size,
                                            new_kfd, (uint64_t)knew_path, new_size, 0);
   }
@@ -275,7 +277,7 @@ long sys_lstat(const char* name, void* st)
     return -ENAMETOOLONG;
 
   size_t name_size = strlen(kname)+1;
-
+  nbwrite(kname, name_size);
   long ret = frontend_syscall(SYS_lstat, (uint64_t)kname, name_size, (uint64_t)&buf, 0, 0, 0, 0);
   nbfetch(&buf, sizeof(buf));
   memcpy(st, &buf, sizeof(buf));
@@ -293,7 +295,7 @@ long sys_fstatat(int dirfd, const char* name, void* st, int flags)
       return -ENAMETOOLONG;
 
     size_t name_size = strlen(kname)+1;
-
+    nbwrite(kname, name_size);
     long ret = frontend_syscall(SYS_fstatat, kfd, (uint64_t)kname, name_size, (uint64_t)&buf, flags, 0, 0);
     nbfetch(&buf, sizeof(buf));
     memcpy(st, &buf, sizeof(buf));
@@ -318,7 +320,7 @@ long sys_statx(int dirfd, const char* name, int flags, unsigned int mask, void *
       return -ENAMETOOLONG;
 
     size_t name_size = strlen(kname)+1;
-
+    nbwrite(kname, name_size);
     long ret = frontend_syscall(SYS_statx, kfd, (uint64_t)kname, name_size, flags, mask, (uint64_t)&buf, 0);
     nbfetch(&buf, sizeof(buf));
     memcpy(st, &buf, sizeof(buf));
@@ -336,7 +338,7 @@ long sys_faccessat(int dirfd, const char *name, int mode)
       return -ENAMETOOLONG;
 
     size_t name_size = strlen(kname)+1;
-
+    nbwrite(kname, name_size);
     return frontend_syscall(SYS_faccessat, kfd, (uint64_t)kname, name_size, mode, 0, 0, 0);
   }
   return -EBADF;
@@ -359,7 +361,8 @@ long sys_linkat(int old_dirfd, const char* old_name, int new_dirfd, const char* 
 
     size_t old_size = strlen(kold_name)+1;
     size_t new_size = strlen(knew_name)+1;
-
+    nbwrite(kold_name, old_size);
+    nbwrite(knew_name, new_size);
     return frontend_syscall(SYS_linkat, old_kfd, (uint64_t)kold_name, old_size,
                                         new_kfd, (uint64_t)knew_name, new_size,
                                         flags);
@@ -381,7 +384,7 @@ long sys_unlinkat(int dirfd, const char* name, int flags)
       return -ENAMETOOLONG;
 
     size_t name_size = strlen(kname)+1;
-
+    nbwrite(kname, name_size);
     return frontend_syscall(SYS_unlinkat, kfd, (uint64_t)kname, name_size, flags, 0, 0, 0);
   }
   return -EBADF;
@@ -401,7 +404,7 @@ long sys_mkdirat(int dirfd, const char* name, int mode)
       return -ENAMETOOLONG;
 
     size_t name_size = strlen(kname)+1;
-
+    nbwrite(kname, name_size);
     return frontend_syscall(SYS_mkdirat, kfd, (uint64_t)kname, name_size, mode, 0, 0, 0);
   }
   return -EBADF;
@@ -574,6 +577,7 @@ int sys_chdir(const char *path)
   if (!strncpy(kbuf, path, MAX_BUF))
     return -ENAMETOOLONG;
 
+  nbwrite(kbuf, strlen(kbuf)+1);
   return frontend_syscall(SYS_chdir, (uint64_t)kbuf, 0, 0, 0, 0, 0, 0);
 }
 
