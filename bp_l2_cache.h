@@ -3,6 +3,7 @@
 #define BP_L2_CACHE_H
 
 #include <stdio.h>
+#include <stdint.h>
 
 #define CACHE_DEV_BASE_ADDR 0x00400000
 #define CACHE_DEV           4
