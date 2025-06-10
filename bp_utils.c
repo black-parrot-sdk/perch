@@ -1,13 +1,6 @@
 #include <stdint.h>
 #include "bp_utils.h"
 
-// BAREMETAL ifdef overrides the weak dramfs_init function such that we don't
-//   need to go through filesystem initialization if we're not using this
-//   feature.
-#ifdef BAREMETAL
-    int dramfs_fs_init() { return 0; };
-#endif
-
 uint64_t bp_get_hart() {
     uint64_t core_id;
     __asm__ volatile("csrr %0, mhartid": "=r"(core_id): :);
