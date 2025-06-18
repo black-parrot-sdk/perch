@@ -1,0 +1,9 @@
+
+# Equivalent to the gcc options:
+# -Wl,--whole-archive -lperch -Wl,--no-whole-archive
+
+%rename link perch_link
+
+*link:
+%{perch_link} %{!nostdlib:--whole-archive} -lperch %{!nostdlib:--no-whole-archive} -static
+

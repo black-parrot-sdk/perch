@@ -2,7 +2,7 @@
 WITH_MARCH ?= rv64gc
 WITH_MABI ?= lp64d
 
-RISCV_GCC = $(CROSS_COMPILE)gcc -fPIC -march=$(WITH_MARCH) -mabi=$(WITH_MABI) -mcmodel=medany -static -I$(BP_SDK_INCLUDE_DIR)
+RISCV_GCC = $(CROSS_COMPILE)gcc -fPIC -march=$(WITH_MARCH) -mabi=$(WITH_MABI) --specs=dramfs.specs
 RISCV_AR = $(CROSS_COMPILE)ar
 RISCV_RANLIB = $(CROSS_COMPILE)ranlib
 
