@@ -1,9 +1,27 @@
 
-# Equivalent to the gcc options:
-# -Wl,--whole-archive -lperch -Wl,--no-whole-archive
+# Equivalent to gcc options:
+# -mcmodel=medany -Wl,--start-group -lc -lgloss_dramfs -Wl,--end-group -lgcc -static -nostartfiles -dT dramfs.ld
 
-%rename link perch_link
+%rename cc1 dramfs_cc1
+%rename lib dramfs_lib
+%rename link dramfs_link
+%rename startfile dramfs_startfile
+%rename endfile dramfs_endfile
 
+*cc1:
+%(dramfs_cc1) -mcmodel=medany
+
+*lib:
+--start-group -lc %{!specs=nosys.specs:-lgloss_dramfs} --whole-archive -lperch --no-whole-archive --end-group
+
+# FIXME: %T sequence is not used to specify a linker script since it
+# does not search the current working directory
 *link:
-%{perch_link} %{!nostdlib:--whole-archive} -lperch %{!nostdlib:--no-whole-archive} -static
+%(dramfs_link) %:replace-outfile(-lgloss -lgloss_dramfs) -dT dramfs.ld%s -static
+
+*startfile:
+
+
+*endfile:
+
 
