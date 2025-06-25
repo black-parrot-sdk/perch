@@ -1,6 +1,6 @@
 #include <stdint.h>
-#include "bp_trap.h"
-#include "bp_emulation.h"
+#include <bp_trap.h>
+#include <bp_emulation.h>
 
 #define EXCEPTION_TOTAL            16
 #define INTERRUPT_TOTAL            12

@@ -1,10 +1,14 @@
 #include <stdint.h>
-#include "bp_utils.h"
+#include <bp_utils.h>
 
-uint64_t bp_get_hart() {
-    uint64_t core_id;
-    __asm__ volatile("csrr %0, mhartid": "=r"(core_id): :);
-    return core_id;
+static uint64_t my_hart;
+
+void bp_init(void) {
+    __asm__ volatile("csrr %0, mhartid": "=r"(my_hart): :);
+}
+
+uint64_t bp_get_hart(void) {
+    return my_hart;
 }
 
 void bp_barrier_end(volatile uint64_t *barrier_address, uint64_t total_num_cores) {
@@ -34,7 +38,7 @@ void bp_hprint(uint8_t nibble) {
   }
 }
 
-void bp_cprint(uint8_t ch) {
+void bp_cprint(int ch) {
   *(PUTCHAR_BASE_ADDR) = ch;
 }
 
@@ -71,7 +75,6 @@ void bp_panic(char *message) {
   }
 
   bp_finish(1);
-  while (1);
 }
 
 uint32_t bp_param_get(char *addr) {

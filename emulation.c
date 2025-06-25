@@ -1,7 +1,7 @@
 #include <stdint.h>
 
-#include "bp_emulation.h"
-#include "bp_utils.h"
+#include <bp_emulation.h>
+#include <bp_utils.h>
 
 #define CSR_ADDR_MVENDORID  0xF11
 #define CSR_ADDR_MARCHID    0xF12

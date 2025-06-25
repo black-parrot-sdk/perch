@@ -1,7 +1,7 @@
 #ifndef BP_ASM_H
 #define BP_ASM_H
 
-#include "encoding.h"
+#include <encoding.h>
 
 #define cbo_inval_block(addr) ({ \
   __asm__ __volatile__ (".insn i 0x0f, 0b010, x0, %0, 0x0" : : "r" (addr)); \

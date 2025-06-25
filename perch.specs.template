@@ -6,8 +6,6 @@
 %rename cc1plus perch_cc1plus
 %rename lib perch_lib
 %rename link perch_link
-%rename startfile perch_startfile
-%rename endfile perch_endfile
 
 *cc1:
 %(perch_cc1) -mcmodel=medany -mstrict-align
@@ -18,12 +16,17 @@
 *lib:
 %(perch_lib) --start-group --whole-archive -lperch --no-whole-archive --end-group
 
+*stack_var:
+-Wl,--defsym=__stack_size_min=$WITH_STACK_SIZE
+
+*heap_var:
+-Wl,--defsym=__heap_size_min=$WITH_HEAP_SIZE
+
+*dram_var:
+-Wl,--defsym=__dram_base=$WITH_DRAM_BASE
+
+*boot_var:
+-Wl,--defsym=__boot_hart=$WITH_BOOT_HART
+
 *link:
-%{!specs=dramfs.specs:-Tperch.ld%s;:%(perch_link)}
-
-*startfile:
-%{!specs=dramfs.specs:perch_crt0.o%s;:%(perch_startfile)}
-
-*endfile:
-
-
+%(perch_link) %(stack_var) %(heap_var) %(dram_var) %(boot_var)
