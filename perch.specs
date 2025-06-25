@@ -3,11 +3,27 @@
 # -mcmodel=medany -Wl,--start-group -lc -lgloss_dramfs -Wl,--end-group -lgcc -static -nostartfiles -dT dramfs.ld
 
 %rename cc1 perch_cc1
+%rename cc1plus perch_cc1plus
 %rename lib perch_lib
+%rename link perch_link
+%rename startfile perch_startfile
+%rename endfile perch_endfile
 
 *cc1:
-%(perch_cc1) -mstrict-align
+%(perch_cc1) -mcmodel=medany -mstrict-align
+
+*cc1plus:
+%(perch_cc1plus) -mcmodel=medany -mstrict-align
 
 *lib:
 %(perch_lib) --start-group --whole-archive -lperch --no-whole-archive --end-group
+
+*link:
+%{!specs=dramfs.specs:-Tperch.ld%s;:%(perch_link)}
+
+*startfile:
+%{!specs=dramfs.specs:perch_crt0.o%s;:%(perch_startfile)}
+
+*endfile:
+
 
