@@ -4,24 +4,10 @@
 
 %rename cc1 perch_cc1
 %rename lib perch_lib
-%rename link perch_link
-%rename startfile perch_startfile
-%rename endfile perch_endfile
 
 *cc1:
-%(perch_cc1) -mcmodel=medany -mstrict-align
+%(perch_cc1) -mstrict-align
 
 *lib:
---start-group -lc %{!specs=nosys.specs:-lgloss_dramfs} --whole-archive -lperch --no-whole-archive --end-group
-
-# FIXME: %T sequence is not used to specify a linker script since it
-# does not search the current working directory
-*link:
-%(perch_link) %:replace-outfile(-lgloss -lgloss_dramfs) -dT dramfs.ld%s -static
-
-*startfile:
-
-
-*endfile:
-
+%(perch_lib) --start-group --whole-archive -lperch --no-whole-archive --end-group
 
